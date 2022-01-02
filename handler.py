@@ -1,3 +1,5 @@
+from datetime import date, datetime
+from dateutil.parser import parse
 import requests
 
 baseUrl = "https://data.covid19.go.id/public/api/update.json"
@@ -18,3 +20,16 @@ def get_general():
     }
     
     return result
+
+def get_yearly(since, upto = None):
+    fetch = requests.get(baseUrl)
+    harian = fetch.json()["update"]["harian"]
+
+    totalresults = []
+
+    if upto == None:
+        datetime.today().year
+
+    for i in harian:
+        data = harian[i]
+        year = parse()
