@@ -44,6 +44,17 @@ def findYearBased(year):
     }
     return jsonify(response)
 
+@app.route("/monthly/<year>/<month>")
+def findMonthBased(year, month):
+    data = get_monthly_based(year, month)
+
+    response = {
+        "ok": True,
+        "data": data,
+        "message": "Data retrieved successfully",
+    }
+    return jsonify(response)
+
 @app.route("/daily/<year>/<month>/<day>")
 def findDailyBased(year, month, day):
     data = get_daily_based(year, month, day)

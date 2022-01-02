@@ -91,6 +91,32 @@ def get_year_based(year):
             return result
     return result
 
+def get_monthly_based(year, month):
+    fetch = requests.get(baseUrl)
+    r = fetch.json()
+    harian = r["update"]["harian"]
+
+    result = {
+        "month": "{}-{}".format(year, month),
+        "positive": 0,
+        "recovered": 0,
+        "deaths": 0,
+        "active": 0,
+    }
+
+    for i in harian:
+        pointedMonth = parse(str(i["key_as_string"]))
+
+        if pointedMonth.year == int(year) and pointedMonth.month == int(month):
+            result["positive"] += i["jumlah_positif"]["value"]
+            result["recovered"] += i["jumlah_sembuh"]["value"]
+            result["deaths"] += i["jumlah_meninggal"]["value"]
+            result["active"] += i["jumlah_dirawat"]["value"]
+            return result
+
+
+    return result
+
 def get_daily_based(year, month, day):
     fetch = requests.get(baseUrl)
     r = fetch.json()
