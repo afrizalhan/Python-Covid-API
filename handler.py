@@ -23,13 +23,46 @@ def get_general():
 
 def get_yearly(since, upto = None):
     fetch = requests.get(baseUrl)
-    harian = fetch.json()["update"]["harian"]
+    r = fetch.json()
+    harian = r["update"]["harian"]
 
     totalresults = []
 
     if upto == None:
-        datetime.today().year
+        upto = datetime.today().year
 
-    for i in harian:
+    i = 0
+    while i < len(harian):
         data = harian[i]
-        year = parse()
+        year = parse(str(data["key_as_string"])).year
+
+        if since <= year and year <= upto:
+            result = {
+                "year": year,
+                "positive": 0,
+                "recovered": 0,
+                "deaths": 0,
+                "active": 0,
+            }
+
+            pointedYear = year
+
+            while pointedYear == year and i < len(harian):
+                result["positive"] += data["jumlah_positif"]["value"]
+                result["recovered"] += data["jumlah_sembuh"]["value"]
+                result["deaths"] += data["jumlah_meninggal"]["value"]
+                result["active"] += data["jumlah_dirawat"]["value"]
+            
+                i += 1
+
+                if i < len(harian):
+                    data = harian[i]
+                    pointedYear = parse(str(data["key_as_string"])).year
+                
+            totalresults.append(result)
+        else:
+            i += 1
+
+    return totalresults
+
+# print(get_yearly(2020))

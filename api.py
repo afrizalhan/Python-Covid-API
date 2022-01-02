@@ -1,5 +1,4 @@
-from flask import Flask, jsonify
-import requests
+from flask import Flask, jsonify, request
 from handler import *
 
 
@@ -20,13 +19,22 @@ def findGeneral():
 
 @app.route("/yearly/", methods = ["GET"])
 def findYearly():
-    since = requests.args.get('since', default= 2020)
-    upto = requests.args.get('upto', default= None)
+    since = request.args.get('since', default = 2020, type = int)
+    upto = request.args.get('upto', default = None, type = int)
+
+    data = get_yearly(since, upto)
+
+    response = {
+        "ok": True,
+        "data": data,
+        "message": "Data retrieved successfully",
+    }
+    return jsonify(response)
 
     
 
-# @app.route("/yearly/<year>")
-# def findYearBased(year):
+@app.route("/yearly/<year>")
+def findYearBased(year):
 
         
 
