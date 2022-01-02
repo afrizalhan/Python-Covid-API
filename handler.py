@@ -78,7 +78,6 @@ def get_year_based(year):
         "active": 0,
     }
 
-    i = 0
     for i in harian:
         pointedYear = parse(str(i["key_as_string"])).year
 
@@ -90,6 +89,33 @@ def get_year_based(year):
 
         if pointedYear > int(year):
             return result
+    return result
+
+def get_daily_based(year, month, day):
+    fetch = requests.get(baseUrl)
+    r = fetch.json()
+    harian = r["update"]["harian"]
+
+    result = {
+        "date": "",
+        "positive": 0,
+        "recovered": 0,
+        "deaths": 0,
+        "active": 0,
+    }
+
+    for i in harian:
+        pointedDay = parse(str(i["key_as_string"]))
+
+        if pointedDay.year == int(year) and pointedDay.month == int(month) and pointedDay.day == int(day):
+            result["date"] += str(pointedDay.date())
+            result["positive"] += i["jumlah_positif"]["value"]
+            result["recovered"] += i["jumlah_sembuh"]["value"]
+            result["deaths"] += i["jumlah_meninggal"]["value"]
+            result["active"] += i["jumlah_dirawat"]["value"]
+            return result
+
+
     return result
         
 # print(get_yearly(2020))
