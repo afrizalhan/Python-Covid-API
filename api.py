@@ -35,6 +35,14 @@ def findYearly():
 
 @app.route("/yearly/<year>")
 def findYearBased(year):
+    data = get_year_based(year)
+
+    response = {
+        "ok": True,
+        "data": data,
+        "message": "Data retrieved successfully",
+    }
+    return jsonify(response)
 
         
 

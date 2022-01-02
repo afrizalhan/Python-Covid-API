@@ -65,4 +65,31 @@ def get_yearly(since, upto = None):
 
     return totalresults
 
+def get_year_based(year):
+    fetch = requests.get(baseUrl)
+    r = fetch.json()
+    harian = r["update"]["harian"]
+
+    result = {
+        "year": year,
+        "positive": 0,
+        "recovered": 0,
+        "deaths": 0,
+        "active": 0,
+    }
+
+    i = 0
+    for i in harian:
+        pointedYear = parse(str(i["key_as_string"])).year
+
+        if pointedYear == int(year):
+            result["positive"] += i["jumlah_positif"]["value"]
+            result["recovered"] += i["jumlah_sembuh"]["value"]
+            result["deaths"] += i["jumlah_meninggal"]["value"]
+            result["active"] += i["jumlah_dirawat"]["value"]
+
+        if pointedYear > int(year):
+            return result
+    return result
+        
 # print(get_yearly(2020))
