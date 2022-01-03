@@ -264,6 +264,56 @@ def get_daily(since, upto = None):
 
     return totalresults
 
+def get_daily_year_based(year, since, upto = None):
+    fetch = requests.get(baseUrl)
+    r = fetch.json()
+    harian = r["update"]["harian"]
+
+    totalresults = []
+
+    if upto == None:
+        upto = datetime.today().date()
+    else:
+        upto = datetime.strptime(upto, '%Y.%m.%d').date()
+
+    since = datetime.strptime(since, '%Y.%m.%d').date()
+
+
+
+    i = 0
+    while i < len(harian):
+        data = harian[i]
+        day = parse(str(data["key_as_string"]))
+
+        if day.year == int(year) and since <= day.date() and day.date() <= upto:
+            result = {
+                "month": datetime.strftime(day, "%Y-%m-%d"),
+                "positive": 0,
+                "recovered": 0,
+                "deaths": 0,
+                "active": 0,
+            }
+
+            pointedDay = day.day
+
+            while pointedDay == day.day and i < len(harian):
+                result["positive"] += data["jumlah_positif"]["value"]
+                result["recovered"] += data["jumlah_sembuh"]["value"]
+                result["deaths"] += data["jumlah_meninggal"]["value"]
+                result["active"] += data["jumlah_dirawat"]["value"]
+            
+                i += 1
+
+                if i < len(harian):
+                    data = harian[i]
+                    pointedDay = parse(str(data["key_as_string"])).day
+                
+            totalresults.append(result)
+        else:
+            i += 1
+
+    return totalresults
+
 def get_daily_based(year, month, day):
     fetch = requests.get(baseUrl)
     r = fetch.json()

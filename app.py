@@ -97,6 +97,20 @@ def findDaily():
     }
     return jsonify(response)
 
+@app.route("/daily/<year>/", methods = ["GET"])
+def findDailyYearBased(year):
+    since = request.args.get('since', default = '2020.03.02', type = str)
+    upto = request.args.get('upto', default = None, type = str)
+
+    data = get_daily_year_based(year, since, upto)
+
+    response = {
+        "ok": True,
+        "data": data,
+        "message": "Data retrieved successfully",
+    }
+    return jsonify(response)
+
 @app.route("/daily/<year>/<month>/<day>")
 def findDailyBased(year, month, day):
     data = get_daily_based(year, month, day)
