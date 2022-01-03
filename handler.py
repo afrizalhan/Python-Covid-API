@@ -391,4 +391,3 @@ def get_daily_based(year, month, day):
 
     return result
         
-# print(get_yearly(2020))
