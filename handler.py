@@ -91,6 +91,56 @@ def get_year_based(year):
             return result
     return result
 
+def get_monthly(since, upto = None):
+    fetch = requests.get(baseUrl)
+    r = fetch.json()
+    harian = r["update"]["harian"]
+
+    totalresults = []
+
+    if upto == None:
+        upto = datetime.today().date()
+    else:
+        upto = datetime.strptime(upto, '%Y.%m').date()
+
+    since = datetime.strptime(since, '%Y.%m').date()
+
+
+
+    i = 0
+    while i < len(harian):
+        data = harian[i]
+        month = parse(str(data["key_as_string"]))
+
+        if since <= month.date() and month.date() <= upto:
+            result = {
+                "month": "{}-0{}".format(month.year, month.month),
+                "positive": 0,
+                "recovered": 0,
+                "deaths": 0,
+                "active": 0,
+            }
+
+            pointedMonth = month.month
+
+            while pointedMonth == month.month and i < len(harian):
+                result["positive"] += data["jumlah_positif"]["value"]
+                result["recovered"] += data["jumlah_sembuh"]["value"]
+                result["deaths"] += data["jumlah_meninggal"]["value"]
+                result["active"] += data["jumlah_dirawat"]["value"]
+            
+                i += 1
+
+                if i < len(harian):
+                    data = harian[i]
+                    pointedMonth = parse(str(data["key_as_string"])).month
+                
+            totalresults.append(result)
+        else:
+            i += 1
+
+    return totalresults
+
 def get_monthly_based(year, month):
     fetch = requests.get(baseUrl)
     r = fetch.json()

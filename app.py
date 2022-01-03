@@ -44,6 +44,20 @@ def findYearBased(year):
     }
     return jsonify(response)
 
+@app.route("/monthly/", methods = ["GET"])
+def findMonthly():
+    since = request.args.get('since', default = '2020.03', type = str)
+    upto = request.args.get('upto', default = None)
+
+    data = get_monthly(since, upto)
+
+    response = {
+        "ok": True,
+        "data": data,
+        "message": "Data retrieved successfully",
+    }
+    return jsonify(response)
+
 @app.route("/monthly/<year>/<month>")
 def findMonthBased(year, month):
     data = get_monthly_based(year, month)
