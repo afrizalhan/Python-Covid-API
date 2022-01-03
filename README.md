@@ -12,7 +12,7 @@ cases
 
 **Certain Future Improvements**
 ---
-1. Make a proper error message
-2. More endpoints
-3. Frontend app
-4. Performance improvements
+- Make a proper error message
+- More endpoints
+- Frontend app
+- Performance improvements
