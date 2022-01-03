@@ -31,8 +31,6 @@ def findYearly():
     }
     return jsonify(response)
 
-    
-
 @app.route("/yearly/<year>")
 def findYearBased(year):
     data = get_year_based(year)

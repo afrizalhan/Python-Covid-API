@@ -114,7 +114,7 @@ def get_monthly(since, upto = None):
 
         if since <= month.date() and month.date() <= upto:
             result = {
-                "month": "{}-0{}".format(month.year, month.month),
+                "month": datetime.strftime(month, "%Y-%m"),
                 "positive": 0,
                 "recovered": 0,
                 "deaths": 0,
@@ -161,7 +161,7 @@ def get_monthly_year_based(year, since, upto = None):
 
         if month.year == int(year) and since <= month.date() and month.date() <= upto:
             result = {
-                "month": "{}-0{}".format(month.year, month.month),
+                "month": datetime.strftime(month, "%Y-%m"),
                 "positive": 0,
                 "recovered": 0,
                 "deaths": 0,
